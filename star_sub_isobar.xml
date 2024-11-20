@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE note [
+<!ENTITY dir "/gpfs01/star/pwg/educkwort/symmetry">
+]>
+
+<job fileListSyntax="xrootd" maxFilesPerProcess="25" simulateSubmission="false">
+
+<stdout URL="file:&dir;/log/sched$JOBID.out" />
+ <stderr URL="file:&dir;/log/sched$JOBID.err" />
+
+ <Generator>
+   <Location>&dir;/report/</Location>
+   <ScriptLocation>&dir;/csh/</ScriptLocation>
+   <ListLocation>&dir;/list/</ListLocation>
+ </Generator>
+
+<command>
+starver SL20c
+ls
+cons
+root4star -q -l -b readPicoDst.C\(\"$FILELIST\",\"${JOBID}_out\"\) &gt;&amp; ${JOBID}_0.log
+ls
+</command>
+
+<input URL="catalog:star.bnl.gov?filetype=daq_reco_picoDst,trgsetupname=production_isobar_2018,filename~st_physics,production=P20ic,storage!=hpss" nFiles="all" />
+<!-- <input URL="catalog:star.bnl.gov?filetype=daq_reco_picoDst,trgsetupname=production_isobar_2018,filename~st_physics,production=P20ic,storage!=hpss" nFiles="100000" /> -->
+<output fromScratch="*.log" toURL="&dir;/log/" />
+<output fromScratch="*_out.root" toURL="&dir;/output_isobar/" />
+
+<SandBox installer="ZIP">
+	<Package name="Package_Flow">
+    <File>file:./StRoot/</File>
+    <File>file:./readPicoDst.C</File>
+	</Package>
+</SandBox>
+
+</job>

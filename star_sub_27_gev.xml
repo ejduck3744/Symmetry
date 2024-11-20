@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE note [
+<!ENTITY dir "/gpfs01/star/pwg/educkwort/excess_proton/27_gev">
+]>
+
+<job fileListSyntax="xrootd" maxFilesPerProcess="25" simulateSubmission="false">
+
+<stdout URL="file:&dir;/log/sched$JOBID.out" />
+ <stderr URL="file:&dir;/log/sched$JOBID.err" />
+
+ <Generator>
+   <Location>&dir;/report/</Location>
+   <ScriptLocation>&dir;/csh/</ScriptLocation>
+   <ListLocation>&dir;/list/</ListLocation>
+ </Generator>
+
+<command>
+starver SL19b
+cons
+root -q -l -b readPicoDst.C\(\"$FILELIST\",\"${JOBID}_out\"\) &gt;&amp; ${JOBID}_0.log
+ls
+</command>
+<input URL="catalog:star.bnl.gov?production=P19ib,trgsetupname=27GeV_production_2018,filetype=daq_reco_picoDst,filename~st_physics,storage!=hpss" nFiles="all" />
+
+<output fromScratch="*.log" toURL="&dir;/log/" />
+<output fromScratch="*.root" toURL="&dir;/output/" />
+
+<SandBox installer="ZIP">
+	<Package name="Package_Flow_27_gev">
+    <File>file:./StRoot/</File>
+    <File>file:./readPicoDst.C</File>
+	<!-- <File>file:./.rootrc</File> -->
+	</Package>
+</SandBox>
+
+</job>
